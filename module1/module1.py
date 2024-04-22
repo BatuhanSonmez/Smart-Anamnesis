@@ -36,6 +36,6 @@ def convert_audio_to_text(audio_file):
         return "API'ye erişim hatası"
 
 # Example usage:
-audio_file = "../dataset/dataset_module1/input_audio1.opus"
+audio_file = "../dataset/dataset_module1/input_audio2.opus"
 transcript = convert_audio_to_text(audio_file)
-print("Transcript:", transcript)
+print("Anamnez:", transcript)
