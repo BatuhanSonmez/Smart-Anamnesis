@@ -8,7 +8,7 @@ import pandas as pd
 import spacy_stanza
 
 # Load spaCy with the Turkish model from spacy-stanza
-nlp = spacy_stanza.load_pipeline("tr", package="")
+nlp = spacy_stanza.load_pipeline("tr")
 
 def extract_anamnesis_info(text_file):
     # Read the text file
