@@ -1,9 +1,14 @@
+#TO-DO:
+# Doccano ile labeling
+# nlp = spacy.load("tr_core_news_md") kodunda hata
+# temel sıkıntı pandas ve C++ 14.0 ve üzeri olmaması. Kurulumu yap.
+
 import spacy
 import pandas as pd
 import spacy_stanza
+from openpyxl.utils import get_column_letter
 
-# Load spaCy with the Turkish model from spacy-stanza
-nlp = spacy_stanza.load_pipeline("tr")
+nlp = spacy.load("tr_core_news_md")
 
 def extract_anamnesis_info(text_file):
     # Read the text file
@@ -30,16 +35,14 @@ def extract_anamnesis_info(text_file):
     }
 
     # Dictionary to store extracted information for each category
-    category_data = {}
+    category_data = {category: {col: None for col in cols} for category, cols in categories.items()}
 
     # Extract entities based on predefined categories
-    for category, cols in categories.items():
-        category_data[category] = {col: None for col in cols}
-
     for ent in doc.ents:
         for category, cols in categories.items():
-            if ent.label_ in cols:
-                category_data[category][ent.label_] = ent.text
+            for col in cols:
+                if ent.label_ == col:
+                    category_data[category][col] = ent.text
 
     return category_data
 
@@ -50,9 +53,16 @@ anamnesis_data = extract_anamnesis_info(text_file)
 # Save each category's data into separate sheets in an Excel file
 output_excel_file = "anamnesis_data.xlsx"
 
-with pd.ExcelWriter(output_excel_file) as writer:
+with pd.ExcelWriter(output_excel_file, engine='openpyxl') as writer:
     for category, data in anamnesis_data.items():
-        df = pd.DataFrame(data, index=[0])  # Convert category data to DataFrame
+        df = pd.DataFrame([data])  # Convert category data to DataFrame
         df.to_excel(writer, sheet_name=category, index=False)
+        
+        # Adjust column width based on text length
+        for col in df.columns:
+            column = df[col]
+            max_length = max(column.astype(str).map(len).max(), len(col))
+            adjusted_width = (max_length + 2) * 1.2
+            writer.sheets[category].column_dimensions[get_column_letter(column.index[0] + 1)].width = adjusted_width
 
 print(f"Anamnesis information saved to {output_excel_file}")
