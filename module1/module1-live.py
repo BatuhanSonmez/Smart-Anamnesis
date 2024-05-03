@@ -57,7 +57,7 @@ class SpeechRecognitionApp:
 
             while self.is_listening:
                 try:
-                    audio = self.recognizer.listen(source, phrase_time_limit=20)
+                    audio = self.recognizer.listen(source, phrase_time_limit=60)
                     recognized_text = self.recognizer.recognize_google(audio, language="tr-TR")
                     self.transcription += recognized_text + "\n"  # Add new transcription as a new line
                     self.text.delete(1.0, tk.END)
