@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from smart_anamnesis import views
 
 urlpatterns = [
+    path('', views.module1_view, name='home'),
     path('admin/', admin.site.urls),
 ]
