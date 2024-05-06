@@ -17,7 +17,7 @@
             $('#startButton').click(function() {
                 $.ajax({
                     type: 'POST',
-                    url: '{% url "module1_view" %}',
+                    url: '{% url "module1" %}',
                     data: {},
                     dataType: 'json',
                     success: function(response) {
