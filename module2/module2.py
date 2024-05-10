@@ -3,7 +3,7 @@ import pandas as pd
 from openpyxl.utils import get_column_letter
 import jsonlines
 
-nlp = spacy_stanza.load_pipeline("tr")
+nlp = spacy_stanza.load_pipeline("tr", verbose=False)
 
 def extract_anamnesis_info(text, labels):
     doc = nlp(text)
@@ -11,7 +11,7 @@ def extract_anamnesis_info(text, labels):
     categories = {
         "Hasta Bilgisi": ["Hasta No", "Hasta Adı", "Yaşı", "Eğitim Durumu", "İşi", "Aile Öyküsü", "Kilosu", "Boyu", "Cinsiyeti"],
         "Komorbid Durumlar": ["Eşlik Eden Bulgular"],
-        "Baş Ağrısı Bilgileri": ["Ağrılı Gün sayısı", "Ağrı Şiddeti", "İlaç Kullanıldığında Ağrı Süresi", "İlaç Kullanılmadığında Ağrı Süresi", "Şiddetli Olanların Şiddeti",
+        "Baş Ağrısı Bilgileri": ["Ağrılı Gün sayısı", "Ağrıların Kaçı Şiddetli", "İlaç Kullanıldığında Ağrı Süresi", "İlaç Kullanılmadığında Ağrı Süresi", "Şiddetli Olanların Şiddeti",
                                  "En Sık Karakteri", "Kaç Yıldır Baş Ağrısı Var"],
         "Eşlik Eden Bulgular": ["Fotofobi (Ağrı Esnasında)", "Fotofobi (Ağrı Dışında)", "Fonofobi (Ağrı Esnasında)",
                                 "Fonofobi (Ağrı Dışında)", "Osmofobi (Ağrı Esnasında)", "Osmofobi (Ağrı Dışında)",
@@ -24,13 +24,16 @@ def extract_anamnesis_info(text, labels):
         "Diğer": ["Diğer"]
     }
 
-    category_data = {category: {col: None for col in cols} for category, cols in categories.items()}
+    category_data = {category: {col: "belirtilmemiş" for col in cols} for category, cols in categories.items()}
 
     for start, end, label in labels:
         label_text = text[start:end]
         for category, cols in categories.items():
             if label in cols:
-                category_data[category][label] = label_text
+                if category_data[category][label] != "belirtilmemiş":
+                    category_data[category][label] += ", " + label_text
+                else:
+                    category_data[category][label] = label_text
 
     return category_data
 
