@@ -93,7 +93,7 @@ def generate_smart_summary(data_path):
     return summary.strip()  # Remove leading/trailing whitespace
 
 # Example usage
-data_path = "../module2/patient_1_anamnesis_data.xlsx"
+data_path = "../dataset/dataset_module3/patient_1_anamnesis_data.xlsx"
 
 smart_summary = generate_smart_summary(data_path)
 print(smart_summary)
