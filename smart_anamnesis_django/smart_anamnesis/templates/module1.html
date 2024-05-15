@@ -1,34 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speech Recognition</title>
-    <!-- Include any necessary CSS here -->
-</head>
-<body>
-    <h1>Continuous Speech Recognition</h1>
-    <div id="transcription"></div>
-    <button id="startButton">Start Listening</button>
+{% extends "base.html" %}
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#startButton').click(function() {
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url "module1" %}',
-                    data: {},
-                    dataType: 'json',
-                    success: function(response) {
-                        $('#transcription').text(response.transcription);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-    </script>
+{% block content %}
+    <h1>Speech Recognition Module</h1>
+    <button onclick="startListening()">Start Listening</button>
+    <button onclick="stopListening()">Stop Listening</button>
+    <div id="transcription"></div>
 </body>
 </html>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Generate Smart Summary</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="file_path" placeholder="Path to Excel file"><br>
+    <button type="submit">Generate Summary</button>
+</form>
+{% endblock %}
